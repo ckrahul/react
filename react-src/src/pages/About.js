@@ -5,7 +5,7 @@ export default class About extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      apage: []
+      about: []
     };
   }
 
@@ -18,7 +18,7 @@ export default class About extends Component {
     }
 
     fetchData(wpAPI.pages).then(data => {
-      this.setState({ apage: [...this.state.apage, ...data] });
+      this.setState({ about: [...this.state.about, ...data] });
     });
 
     function checkStatus(response) {
@@ -31,11 +31,11 @@ export default class About extends Component {
   }
 
   render() {
-    const { apage } = this.state;
+    const { about } = this.state;
     return (
       <div className="page-wrapper">
         <div className="container">
-          {apage.map(page => (
+          {about.map(page => (
             <article id={page.id}>
               <header className="entry-header">
                 <h2 className="entry-title">{page.title.rendered}</h2>
