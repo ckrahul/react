@@ -15,7 +15,9 @@ export default class Sidebar extends Component {
   componentDidMount() {
     axios
       .all([
-        axios.get(wpAPI.categories).then(response => response.data),
+        axios
+          .get(wpAPI.categories + "?exclude=1")
+          .then(response => response.data),
         axios.get(wpAPI.tags).then(response => response.data)
       ])
       .then(
@@ -36,7 +38,7 @@ export default class Sidebar extends Component {
         <ul className="cat-lists">
           {categories.map(cat => (
             <li className="cat-list" key={cat.slug}>
-              <Link to={"/wordpress/category/" + cat.slug}>{cat.name}</Link>
+              <Link to={"/wordpress/category/" + cat.id}>{cat.name}</Link>
             </li>
           ))}
         </ul>
