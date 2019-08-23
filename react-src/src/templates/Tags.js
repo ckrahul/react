@@ -7,18 +7,31 @@ export default class Tags extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tags: []
+      tags: [],
+      id: '',
+      fetch: false
     };
   }
 
   componentDidMount() {
+      this.setState({ id : this.props.match.params.id, fetch: true });
+  }
+
+  componentDidUpdate(){
+    if( this.state.id !== this.props.match.params.id ) {
+      this.setState({id : this.props.match.params.id, fetch: true });
+    }
+
+    if( true === this.state.fetch ) {
     axios
-      .get(wpAPI.posts + "?tags[]=" + this.props.match.params.id)
+      .get(wpAPI.posts + "?tags[]=" + this.state.id)
       .then(response => response.data)
       .then(data => {
-        this.setState({ tags: data });
+        console.log( data );
+        this.setState({ tags: data, fetch : false });
       })
       .catch(error => console.log(error));
+    }
   }
 
   render() {

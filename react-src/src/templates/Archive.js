@@ -2,28 +2,36 @@ import React, { Component } from "react";
 import axios from "axios";
 import wpAPI from "../data/Api";
 import Sidebar from "../components/Sidebar";
+import queryString from "query-string";
 
 export default class Archive extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      terms: []
+      terms: [],
+      id: "",
+      fetch: false
     };
   }
 
-  async componentDidMount() {
-    const response = await axios.get(
-      wpAPI.posts +
-        "?filter[taxonomy]=category&filter[term]=" +
-        this.props.match.params.slug
-    );
-    try {
-      this.setState({
-        terms: response.data,
-        isLoading: false
-      });
-    } catch (error) {
-      this.setState({ error, isLoading: false });
+  componentDidMount() {
+    this.setState({ id: this.props.match.params.id, fetch: true });
+  }
+
+  componentDidUpdate() {
+    if (this.state.id !== this.props.match.params.id) {
+      this.setState({ id: this.props.match.params.id, fetch: true });
+    }
+
+    if (true === this.state.fetch) {
+      axios
+        .get(wpAPI.posts + "?categories=" + this.state.id)
+        .then(response => response.data)
+        .then(data => {
+          console.log(data);
+          this.setState({ terms: data, fetch: false });
+        })
+        .catch(error => console.log(error));
     }
   }
 
